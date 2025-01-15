@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,19 +27,92 @@
             </div>
         </section>
 
-        <section class="contacts">
+        <section class="deputy">
             <div class="card">
-                <h2>Контакты</h2>
-                <ul>
-                    <li><strong>Discord:</strong> e1emay</li>
-                    <li><strong>Телефон:</strong> 197 - 197</li>
-                </ul>
+                <h2>Заместитель лидера</h2>
+                <p><strong>Имя:</strong> Lil_Wargos</p>
+                <p><strong>Discord:</strong> e1emay</p>
+                <p><strong>Телефон в игре:</strong> 197-197</p>
             </div>
+        </section>
+
+        <!-- Форма для добавления новых участников -->
+        <section class="add-member">
+            <div class="card">
+                <h2>Добавить нового участника</h2>
+                <form id="addMemberForm">
+                    <label for="name">Имя:</label>
+                    <input type="text" id="name" required>
+                    
+                    <label for="discord">Discord:</label>
+                    <input type="text" id="discord" required>
+                    
+                    <label for="phone">Телефон в игре:</label>
+                    <input type="text" id="phone" required>
+                    
+                    <button type="submit">Добавить</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Секция для отображения участников -->
+        <section class="members">
+            <h2>Участники и их контакты:</h2>
+            <div id="membersList"></div>
         </section>
 
         <footer>
             <p>© 2025 ПОСЛЕ ШКОЛЫ В ДЕЛЬФИНАРИЙ. Все права защищены.</p>
         </footer>
     </div>
+
+    <script>
+        // Загружаем список участников из LocalStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const members = JSON.parse(localStorage.getItem('members')) || [];
+            const membersList = document.getElementById('membersList');
+            members.forEach(member => {
+                const memberDiv = document.createElement('div');
+                memberDiv.classList.add('member');
+                memberDiv.innerHTML = `
+                    <p><strong>Имя:</strong> ${member.name}</p>
+                    <p><strong>Discord:</strong> ${member.discord}</p>
+                    <p><strong>Телефон в игре:</strong> ${member.phone}</p>
+                `;
+                membersList.appendChild(memberDiv);
+            });
+        });
+
+        // Обработчик отправки формы
+        document.getElementById('addMemberForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const discord = document.getElementById('discord').value;
+            const phone = document.getElementById('phone').value;
+
+            // Загружаем текущий список участников из LocalStorage
+            const members = JSON.parse(localStorage.getItem('members')) || [];
+
+            // Добавляем нового участника
+            members.push({ name, discord, phone });
+
+            // Сохраняем обновленный список в LocalStorage
+            localStorage.setItem('members', JSON.stringify(members));
+
+            // Добавляем нового участника на страницу
+            const memberDiv = document.createElement('div');
+            memberDiv.classList.add('member');
+            memberDiv.innerHTML = `
+                <p><strong>Имя:</strong> ${name}</p>
+                <p><strong>Discord:</strong> ${discord}</p>
+                <p><strong>Телефон в игре:</strong> ${phone}</p>
+            `;
+            document.getElementById('membersList').appendChild(memberDiv);
+
+            // Очищаем форму
+            document.getElementById('addMemberForm').reset();
+        });
+    </script>
 </body>
 </html>
